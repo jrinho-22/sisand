@@ -70,8 +70,8 @@ namespace WebApplication1.Models.Services
 
                 await appDbContext.SaveChangesAsync();
 
-                var link = $"<a href=\"https://sisand-app-cvghg2hxe6djamh2.canadacentral-01.azurewebsites.net/User/ValidateEmail?token={token}\">Confirmar Email</a>";
-                emailService.SendEmailAsync("jrinho22@gmail.com", "any", "any22", link);
+                var link = $"<a href=\"https://sisand-app-cvghg2hxe6djamh2.canadacentral-01.azurewebsites.net/ValidateEmail?token={token}\">Confirmar Email</a>";
+                emailService.SendEmailAsync("jrinho22@gmail.com", "Validação de Email", "", link);
                 //await transaction.CommitAsync();
 
                 return user;

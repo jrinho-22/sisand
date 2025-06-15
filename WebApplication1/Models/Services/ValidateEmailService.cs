@@ -21,7 +21,7 @@ namespace WebApplication1.Models.Services
                 throw new InvalidOperationException();
             }
 
-            var login = await loginRepository.GetLoginById(validate.Id);
+            var login = await loginRepository.GetLoginById(validate.LoginId);
             login.EmailVerified = true;
 
             await appDbContext.SaveChangesAsync();

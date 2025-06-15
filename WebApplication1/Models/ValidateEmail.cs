@@ -5,6 +5,7 @@
         public long Id { get; set; }
         public string Email { get; private set; }
         public string Token { get; private set; }
+        public long LoginId { get; set; }
 
         #region Relation
         public Login Login { get; set; }
