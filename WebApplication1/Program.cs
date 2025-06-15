@@ -10,10 +10,11 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
 
-        Register.DependencyInjection(builder.Services);
+        Register.DependencyInjection(builder);
 
-        builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseAzureSql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        //builder.Services.AddDbContext<AppDbContext>(options =>
+            //options.UseAzureSql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
         // Add services to the container.
 

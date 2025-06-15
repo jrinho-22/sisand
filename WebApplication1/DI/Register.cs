@@ -1,25 +1,38 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.Infra;
+using Azure.Communication.Email;
 using WebApplication1.Infra.Repositories;
 using WebApplication1.Models.Services;
+using WebApplication1.Core;
 
 namespace WebApplication1.DI
 {
     public static class Register
     {
-        public static void DependencyInjection(IServiceCollection serviceCollection)
+        public static void DependencyInjection(WebApplicationBuilder builder)
         {
             //Context(serviceCollection);
-            Repositories(serviceCollection);
-            Services(serviceCollection);
+            Core(builder);
+            Repositories(builder.Services);
+            Services(builder.Services);
             //DomainEvents(serviceCollection);
+        }
+        private static void Core(WebApplicationBuilder builder)
+        {
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseAzureSql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            var emailConnectionString = builder.Configuration.GetConnectionString("CommunicationServices");
+            builder.Services.AddSingleton(new EmailClient(emailConnectionString));
         }
 
         private static void Services(IServiceCollection serviceCollection)
         {
             serviceCollection.AddTransient<IUserService, UserService>();
+            serviceCollection.AddTransient<IEmailService, EmailService>();
         }
 
         private static void Repositories(IServiceCollection serviceCollection)
