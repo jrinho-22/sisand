@@ -12,6 +12,7 @@ namespace WebApplication1.Controllers
         IUserService userService,
         IEmailService emailService) : ControllerBase
     {
+
         [HttpGet("{UserId}")]
         public async Task<IActionResult> GetUsers(long UserId)
         {
@@ -29,7 +30,8 @@ namespace WebApplication1.Controllers
         [HttpGet("test")]
         public async Task<IActionResult> testeEmail()
         {
-            emailService.SendEmailAsync("jrinho22@gmail.com", "any", "any22", "<h1>taggg</h1>");
+            var link = "<a href=\"https://sisand-app-cvghg2hxe6djamh2.canadacentral-01.azurewebsites.net/User/1\">Abrir Perfil</a>";
+            emailService.SendEmailAsync("jrinho22@gmail.com", "any", "any22", link);
             //try
             //{
             //    var result = await userService.GetUserDataById("1");

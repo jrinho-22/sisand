@@ -9,6 +9,7 @@ namespace WebApplication1.Infra
 
         public DbSet<User> User => Set<User>();
         public DbSet<Login> Login => Set<Login>();
+        public DbSet<ValidateEmail> ValidateEmail => Set<ValidateEmail>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

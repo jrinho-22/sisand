@@ -27,6 +27,7 @@ namespace WebApplication1.Models
         #region Relation
         [JsonIgnore]
         public virtual User User { get; set; } = null!;
+        public virtual ICollection<ValidateEmail> ValidateEmail { get; set; }
 
         #endregion
 

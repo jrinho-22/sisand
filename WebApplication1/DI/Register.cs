@@ -33,12 +33,14 @@ namespace WebApplication1.DI
         {
             serviceCollection.AddTransient<IUserService, UserService>();
             serviceCollection.AddTransient<IEmailService, EmailService>();
+            serviceCollection.AddTransient<IValidateEmailService, ValidateEmailService>();
         }
 
         private static void Repositories(IServiceCollection serviceCollection)
         {
             serviceCollection.AddTransient<IUserRepository, UserRepository>();
             serviceCollection.AddTransient<ILoginRepository, LoginRepository>();
+            serviceCollection.AddTransient<IValidateEmailRepository, ValidateEmailRepository>();
         }
     }
 }

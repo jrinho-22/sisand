@@ -7,7 +7,6 @@ namespace WebApplication1.Infra.Repositories
     public interface IUserRepository
     {
         Task<Models.User> GetUserDataById(long userId);
-
         Task<bool> RegisterUser(User user);
     }
     public class UserRepository(AppDbContext appDbContext) : IUserRepository
