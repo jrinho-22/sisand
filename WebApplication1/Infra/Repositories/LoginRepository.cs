@@ -11,11 +11,17 @@ namespace WebApplication1.Infra.Repositories
         Task<bool> RegisterLogin(Login login);
 
         Task<UserSessionDto> GetUserSession(LoginViewModel loginViewModel);
-        Task<UserSessionDto> GetLoginById(long loginId);
+        Task<UserSessionDto> GetLoginDataById(long loginId);
+        Task<Login> GetLoginById(long loginId);
     }
     public class LoginRepository(AppDbContext appDbContext) : ILoginRepository
     {
-        public async Task<UserSessionDto> GetLoginById(long loginId)
+        public async Task<Login> GetLoginById(long loginId)
+        {
+            return await appDbContext.Login.Where(l => l.Id == loginId).FirstOrDefaultAsync();
+        }
+
+        public async Task<UserSessionDto> GetLoginDataById(long loginId)
         {
             return await appDbContext.Login
                 .Where(l => l.Id == loginId)

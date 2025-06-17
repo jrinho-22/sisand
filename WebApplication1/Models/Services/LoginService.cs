@@ -12,7 +12,7 @@ namespace WebApplication1.Models.Services
     {
         public async Task<UserSessionDto> GetLoginById(long loginId)
         {
-            var login = await loginRepository.GetLoginById(loginId);
+            var login = await loginRepository.GetLoginDataById(loginId);
             if (login == null)
             {
                 throw new Exception("Login not found");
