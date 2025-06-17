@@ -8,19 +8,11 @@ namespace WebApplication1.Models.Services
 {
     public interface IUserService
     {
-        /// <summary>
-        /// Method responsible for retriving a user data
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
         Task<User> GetUserDataById(long userId);
-
-        /// <summary>
-        /// Method responsible for registering a user
-        /// </summary>
-
-        /// <returns></returns>
         Task<User> RegisterUser(RegisterViewModel registerViewModel);
+        Task<UserDto[]> GetAllUsers();
+        Task<User> UpdateUser(EditViewModel editViewModel, long userId);
+        Task<bool> DeleteUserById(long userId);
     }
     public class UserService(
         IUserRepository userRepository,
@@ -29,9 +21,42 @@ namespace WebApplication1.Models.Services
         IValidateEmailRepository validateEmailRepository,
         AppDbContext appDbContext) : IUserService
     {
-        async public Task<User> GetUserDataById(long userId)
+        public async Task<bool> DeleteUserById(long userId)
         {
-            return await userRepository.GetUserDataById(userId);
+            return await userRepository.DeleteByUserId(userId);
+        }
+        public async Task<UserDto[]> GetAllUsers()
+        {
+            return await userRepository.GetAllUsers();
+        }
+        public  async Task<User> GetUserDataById(long userId)
+        {
+            return await userRepository.GetUserById(userId);
+        }
+
+        public async Task<User> UpdateUser(EditViewModel editViewModel, long userId)
+        {
+            try
+            {
+                var user = await userRepository.GetUserById(userId);
+                if (user == null)
+                {
+                    throw new Exception("User not found");
+                }
+                user.ChangeUserData(
+                    editViewModel.Name,
+                    editViewModel.Phone,
+                    editViewModel.Cep);
+                user.IsValid();
+
+                await appDbContext.SaveChangesAsync();
+
+                return user;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         async public Task<User> RegisterUser(RegisterViewModel registerViewModel)
@@ -41,18 +66,13 @@ namespace WebApplication1.Models.Services
                 Name = registerViewModel.Name,
                 Phone = registerViewModel.Phone,
                 Cep = registerViewModel.Cep,
-                Logradouro = registerViewModel.Logradouro,
-                Numero = registerViewModel.Numero,
-                Complemento = registerViewModel.Complemento,
-                Bairro = registerViewModel.Bairro,
-                Cidade = registerViewModel.Cidade
             };
             user.IsValid();
 
             var login = new Login
             {
                 Email = registerViewModel.Email,
-                PasswordHash = registerViewModel.Password,
+                PasswordHash = PasswordHashService.HashPassword(registerViewModel.Password),
                 User = user
             };
             login.IsValid();
@@ -60,7 +80,6 @@ namespace WebApplication1.Models.Services
             var token = Guid.NewGuid().ToString("N");
             var validate = new ValidateEmail(registerViewModel.Email, token);
             validate.Login = login;
-            //var transaction = appDbContext.Database.BeginTransaction();
 
             try
             {
@@ -71,14 +90,12 @@ namespace WebApplication1.Models.Services
                 await appDbContext.SaveChangesAsync();
 
                 var link = $"<a href=\"https://sisand-app-cvghg2hxe6djamh2.canadacentral-01.azurewebsites.net/ValidateEmail?token={token}\">Confirmar Email</a>";
-                emailService.SendEmailAsync("jrinho22@gmail.com", "Validação de Email", "", link);
-                //await transaction.CommitAsync();
+                emailService.SendEmailAsync(registerViewModel.Email, "Validação de Email", "", link);
 
                 return user;
             }
             catch (Exception e)
             {
-                //await transaction.RollbackAsync();
                 throw;
             }
         }

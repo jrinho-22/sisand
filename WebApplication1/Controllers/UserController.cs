@@ -13,34 +13,32 @@ namespace WebApplication1.Controllers
         IEmailService emailService) : ControllerBase
     {
 
-        [HttpGet("{UserId}")]
-        public async Task<IActionResult> GetUsers(long UserId)
+        [HttpGet()]
+        public async Task<IActionResult> GetAllUsers()
         {
             try
             {
-                var result = await userService.GetUserDataById(UserId);
+                var result = await userService.GetAllUsers();
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(new { message = ex.Message });
             }
         }
 
-        [HttpGet("test")]
-        public async Task<IActionResult> testeEmail()
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> DeleteUser(long userId)
         {
-            var link = "<a href=\"https://sisand-app-cvghg2hxe6djamh2.canadacentral-01.azurewebsites.net/User/1\">Abrir Perfil</a>";
-            emailService.SendEmailAsync("jrinho22@gmail.com", "any", "any22", link);
-            //try
-            //{
-            //    var result = await userService.GetUserDataById("1");
-            return Ok("ok");
-            //}
-            //catch (Exception ex)
-            //{
-            //    return BadRequest(ex);
-            //}
+            try
+            {
+                var result = await userService.DeleteUserById(userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPost()]
@@ -53,7 +51,21 @@ namespace WebApplication1.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> UpdateUser(long userId, [FromBody] EditViewModel editViewModel)
+        {
+            try
+            {
+                var result = await userService.UpdateUser(editViewModel, userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
         }
     }

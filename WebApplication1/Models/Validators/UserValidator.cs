@@ -13,26 +13,9 @@ namespace WebApplication1.Models.Validators
             .NotEmpty()
             .WithMessage("Telefone Obrigatório");
 
-
-            RuleFor(p => p.Cidade)
-            .NotEmpty()
-            .WithMessage("Cidade Obrigatório");
-
-            RuleFor(p => p.Bairro)
-            .NotEmpty()
-            .WithMessage("Bairro Obrigatório");
-
             RuleFor(p => p.Cep)
             .NotEmpty()
             .WithMessage("Cep Obrigatório");
-
-            RuleFor(p => p.Logradouro)
-            .NotEmpty()
-            .WithMessage("Logradouro Obrigatório");
-
-            RuleFor(p => p.Numero)
-            .NotEmpty()
-            .WithMessage("Numero Obrigatório");
         }
     }
 }

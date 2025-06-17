@@ -14,11 +14,9 @@ namespace WebApplication1.DI
     {
         public static void DependencyInjection(WebApplicationBuilder builder)
         {
-            //Context(serviceCollection);
             Core(builder);
             Repositories(builder.Services);
             Services(builder.Services);
-            //DomainEvents(serviceCollection);
         }
         private static void Core(WebApplicationBuilder builder)
         {
@@ -33,6 +31,7 @@ namespace WebApplication1.DI
         {
             serviceCollection.AddTransient<IUserService, UserService>();
             serviceCollection.AddTransient<IEmailService, EmailService>();
+            serviceCollection.AddTransient<ILoginService, LoginService>();
             serviceCollection.AddTransient<IValidateEmailService, ValidateEmailService>();
         }
 

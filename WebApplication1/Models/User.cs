@@ -10,11 +10,6 @@ namespace WebApplication1.Models
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Cep { get; set; }
-        public string Logradouro { get; set; }
-        public string Numero { get; set; }
-        public string Complemento { get; set; }
-        public string Bairro { get; set; }
-        public string Cidade { get; set; }
         public DateTime CreatedAt { get; } = DateTime.Now;
         public DateTime? DeletedAt { get; private set; }
 
@@ -28,6 +23,16 @@ namespace WebApplication1.Models
         #endregion
 
         #region Methods
+
+        public void ChangeUserData(
+            string name,
+            string phone,
+            string cep)
+        {
+            Name = name;
+            Phone = phone;
+            Cep = cep;
+        }
         public void IsValid()
         {
             new UserValidator().ValidateAndThrow(this);
